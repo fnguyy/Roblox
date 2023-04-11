@@ -62,9 +62,9 @@ end
 
 getgenv().Aimbot = true
 
-local camera = game:GetService('Workspace').CurrentCamera
-
 while getgenv().Aimbot do
+	local camera = game:GetService('Workspace').CurrentCamera
+	
 	if GetClosest() then
 		camera.CFrame = CFrame.new(camera.CFrame.Position, GetClosest().Head.Position)
 		wait()
