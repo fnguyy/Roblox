@@ -1,0 +1,72 @@
+--[[
+
+-- DUMP THE GOOD SHIT
+
+local string = '---------------------------------------------'
+
+for i, v in next, getgc(true) do
+	if type(v) == 'table' and rawget(v, 'damage') then
+		for i2, v2 in pairs(v) do
+			string = string .. '\n'
+			string = string .. tostring(i2) .. ' ' .. tostring(v2) .. '\n'
+		end
+		string = string .. '\n-------------------------------------\n'
+	end
+end
+writefile('PAINTBALL DUMP.txt', string)
+]]--
+
+local Character = game.Players.LocalPlayer.Character
+
+-- [Gun Mods] --
+
+for i, v in next, getgc(true) do
+	if type(v) == 'table' and rawget(v, 'damage') then
+		v.shotrate = 0.00000001
+		v.automatic = true
+		v.damage = math.huge
+		v.velocity = 10000
+	end
+end
+
+-- [Get Closest Player] --
+
+local ClosestPlayer = math.huge
+local closest;
+
+local function GetClosest()
+	for i, v in pairs(game.Players:GetPlayers()) do
+		if v.Character:WaitForChild('Humanoid') and v.Character.Humanoid.Health ~= 0 and v.Team ~= game.Players.LocalPlayer.Team then
+			local Distance = (Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).magnitude
+			if Distance <  ClosestPlayer then
+				ClosestPlayer = Distance
+				closest = v.Character
+			end
+		end
+	end
+	return closest
+end
+
+-- [Teleport] --
+
+getgenv().Teleport = true
+
+while getgenv().Teleport do
+	if GetClosest() then
+		Character.HumanoidRootPart:PivotTo(GetClosest().HumanoidRootPart:GetPivot() + Vector3.new(0, 6, 3))
+	else break end
+	wait(0.2)
+end
+
+-- [Aimbot] --
+
+getgenv().Aimbot = true
+
+local camera = game:GetService('Workspace').CurrentCamera
+
+while getgenv().Aimbot do
+	if GetClosest() then
+		camera.CFrame = CFrame.new(camera.CFrame.Position, GetClosest().Head.Position)
+		wait()
+	else break end
+end
