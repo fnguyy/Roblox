@@ -33,6 +33,7 @@ end
 
 -- [Find Character] --
 
+local UIS = game.UserInputService
 local Character = game.Players.LocalPlayer.Character
 
 if not Character then
@@ -49,7 +50,7 @@ if not Character then
 end
 
 -- Define a coroutine that waits for Character and its HumanoidRootPart
-local function WaitForCharacter()
+function WaitForCharacter()
     while not Character or not Character:FindFirstChild('HumanoidRootPart') do
         wait()
     end
@@ -57,7 +58,7 @@ local function WaitForCharacter()
 end
 
 -- Wrap the coroutine in a function that can be called later
-local function GetCharacter()
+function GetCharacter()
     return WaitForCharacter()
 end
 
@@ -82,22 +83,32 @@ end
 
 -- [Teleport] --
 
-getgenv().Teleport = true
+getgenv().Teleport = false
+
+UIS.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton2 then
+		getgenv().Teleport = true
+	end
+end)
 
 spawn(function()
 	while getgenv().Teleport do
 		local Character = GetCharacter()
-		if Character and Character:FindFirstChild('HumanoidRootPart') then
+		if Character and Character:FindFirstChild('HumanoidRootPart') and Character:FindFirstChild('Humanoid').Health ~= 0 then
 			if GetClosest() then
 				local targetPos = GetClosest().HumanoidRootPart.Position + Vector3.new(0, 6, -3)
-               	local tweenInfo = TweenInfo.new((targetPos - Character.HumanoidRootPart.Position).Magnitude / 100, Enum.EasingStyle.Linear, Enum.EasingDirection.In)
-                local tween = game:GetService('TweenService'):Create(2, Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(targetPos)})
-                tween:Play()
-			else
-				rconsolewarn('Teleport is OFF, no close Players.'), getgenv().Teleport = false
+				local tweenInfo = TweenInfo.new((targetPos - Character.HumanoidRootPart.Position).Magnitude / 100, Enum.EasingStyle.Linear, Enum.EasingDirection.In)
+				local tween = game:GetService('TweenService'):Create(Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(targetPos)})
+				tween:Play()
 			end
 		end
-		wait(0.2)
+	end
+	wait(0.2)
+end)
+
+UIS.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton2 then
+		getgenv().Teleport = false
 	end
 end)
 
@@ -114,7 +125,8 @@ spawn(function()
 				camera.CFrame = CFrame.new(camera.CFrame.Position, GetClosest().Head.Position)
 				wait()
 			else
-				rconsolewarn('Aimbot is OFF, no close Players.'), getgenv().Aimbot = false
+				rconsolewarn('Aimbot is OFF, no close Players.')
+				getgenv().Aimbot = false
 			end
 		end
 	end
