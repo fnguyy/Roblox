@@ -44,7 +44,7 @@ if not Character then
 			getgenv().Teleport = false
 			getgenv().Aimbot = false
 			Character = nil
-    	end)
+    		end)
 	end)
 end
 
@@ -57,7 +57,6 @@ end
 local closest;
 
 function GetClosest()
-	print('Getting Next Target')
 	local ClosestPlayer = 100
 	for i, v in pairs(game.Players:GetPlayers()) do
 		if Character and Character:FindFirstChild('HumanoidRootPart') and v.Character and v.Character:FindFirstChildOfClass('Humanoid') and v.Character.Humanoid.Health ~= 0 and v.Team ~= game.Players.LocalPlayer.Team then
