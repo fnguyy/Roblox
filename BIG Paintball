@@ -57,7 +57,6 @@ end
 local closest;
 
 function GetClosest()
-	print('Getting Targer!')
 	local ClosestPlayer = 100
 	for i, v in pairs(game.Players:GetPlayers()) do
 		if Character and Character:FindFirstChild('HumanoidRootPart') and v.Character and v.Character:FindFirstChildOfClass('Humanoid') and v.Character.Humanoid.Health ~= 0 and v.Team ~= game.Players.LocalPlayer.Team then
@@ -68,6 +67,7 @@ function GetClosest()
 			end
 		end
 	end
+	print('Closest Target: ' .. closest)
 	return closest
 end
 
@@ -77,6 +77,7 @@ spawn(function()
 	while getgenv().Teleport do
 		if Character and Character:FindFirstChild('HumanoidRootPart') then
 			if GetClosest() then
+				print('Target Found: ' .. GetClosest())
 				local targetPos = GetClosest().HumanoidRootPart.Position + Vector3.new(0, 6, -3)
                			local tweenInfo = TweenInfo.new((targetPos - Character.HumanoidRootPart.Position).Magnitude/100, Enum.EasingStyle.Linear)
                 		local tween = game:GetService('TweenService'):Create(Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(targetPos)})
