@@ -16,17 +16,8 @@ end
 writefile('PAINTBALL DUMP.txt', string)
 ]]--
 
-local Character = game.Players.LocalPlayer.Character
-
 -- [Gun Mods] --
 
-local Character = game.Players.LocalPlayer.Character
-
-if not Character then
-	game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
-		Character = char
-	end)
-end	
 getgenv().GunMods = true
 
 if getgenv().GunMods then
@@ -40,15 +31,36 @@ if getgenv().GunMods then
 	end
 end
 
+-- [Find Character] --
+
+local Character = game.Players.LocalPlayer.Character
+
+if not Character then
+	game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
+		getgenv().Teleport = true
+		getgenv().Aimbot = true
+		Character = char
+		Character:WaitForChild('Humanoid').Died:Connect(function()
+			getgenv().Teleport = false
+			getgenv().Aimbot = false
+			Character = nil
+    	end)
+	end)
+end
+
+while not Character or not Character:FindFirstChild('HumanoidRootPart') do
+    wait()
+end
+
 -- [Get Closest Player] --
 
-local ClosestPlayer = 200
 local closest;
 
-local function GetClosest()
+function GetClosest()
+	local ClosestPlayer = 100
 	for i, v in pairs(game.Players:GetPlayers()) do
 		if Character and Character:FindFirstChild('HumanoidRootPart') and v.Character and v.Character:FindFirstChildOfClass('Humanoid') and v.Character.Humanoid.Health ~= 0 and v.Team ~= game.Players.LocalPlayer.Team then
-			local Distance = math.min(200, (Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).magnitude)
+			local Distance = math.min(50, (Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).magnitude)
 			if Distance ~= 0 and Distance < ClosestPlayer then
 				ClosestPlayer = Distance
 				closest = v.Character
@@ -60,24 +72,31 @@ end
 
 -- [Teleport] --
 
-getgenv().Teleport = true
-
-while getgenv().Teleport do
-	if GetClosest() then
-		Character.HumanoidRootPart:PivotTo(GetClosest().HumanoidRootPart:GetPivot() + Vector3.new(0, 6, -3))
-	else break end
-	wait(0.2)
-end
+spawn(function()
+	while getgenv().Teleport do
+		if Character and Character:FindFirstChild('HumanoidRootPart') then
+			if GetClosest() then
+				Character:PivotTo(GetClosest():GetPivot() + Vector3.new(0, 6, -3))
+			else
+				rconsolewarn('Teleport is OFF, no close Players.') getgenv().Teleport = false
+			end
+		end
+		wait(0.2)
+	end
+end)
 
 -- [Aimbot] --
 
-getgenv().Aimbot = true
-
-while getgenv().Aimbot do
-	local camera = game:GetService('Workspace').CurrentCamera
-	
-	if GetClosest() then
-		camera.CFrame = CFrame.new(camera.CFrame.Position, GetClosest().Head.Position)
-		wait()
-	else break end
-end
+spawn(function()
+	while getgenv().Aimbot do
+		if Character and Character:FindFirstChild('HumanoidRootPart') then
+			if GetClosest() and GetClosest().Head then
+				local camera = game:GetService('Workspace').CurrentCamera
+				camera.CFrame = CFrame.new(camera.CFrame.Position, GetClosest().Head.Position)
+				wait()
+			else
+				rconsolewarn('Aimbot is OFF, no close Players.') getgenv().Aimbot = false
+			end
+		end
+	end
+end)
