@@ -76,7 +76,10 @@ spawn(function()
 	while getgenv().Teleport do
 		if Character and Character:FindFirstChild('HumanoidRootPart') then
 			if GetClosest() then
-				Character:PivotTo(GetClosest():GetPivot() + Vector3.new(0, 6, -3))
+				local targetPos = GetClosest().HumanoidRootPart.Position + Vector3.new(0, 6, -3)
+               			local tweenInfo = TweenInfo.new((targetPos - Character.HumanoidRootPart.Position).Magnitude/100, Enum.EasingStyle.Linear)
+                		local tween = game:GetService('TweenService'):Create(Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(targetPos)})
+                		tween:Play()
 			else
 				rconsolewarn('Teleport is OFF, no close Players.') getgenv().Teleport = false
 			end
@@ -92,7 +95,7 @@ spawn(function()
 		if Character and Character:FindFirstChild('HumanoidRootPart') then
 			if GetClosest() and GetClosest().Head then
 				local camera = game:GetService('Workspace').CurrentCamera
-				camera.CFrame = CFrame.new(camera.CFrame.Position, GetClosest().Head.Position)
+				camera.CFrame = CFrame.new(camera.CFrame.Position, (GetClosest().Head.CFrame - camera.CFrame).magnitude / 100)
 				wait()
 			else
 				rconsolewarn('Aimbot is OFF, no close Players.') getgenv().Aimbot = false
