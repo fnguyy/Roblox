@@ -31,14 +31,14 @@ end
 
 -- [Get Closest Player] --
 
-local ClosestPlayer = math.huge
+local ClosestPlayer = 200
 local closest;
 
 local function GetClosest()
 	for i, v in pairs(game.Players:GetPlayers()) do
 		if v.Character:WaitForChild('Humanoid') and v.Character.Humanoid.Health ~= 0 and v.Team ~= game.Players.LocalPlayer.Team then
-			local Distance = (Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).magnitude
-			if Distance <  ClosestPlayer then
+			local Distance = math.min(200, (Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).magnitude)
+			if Distance ~= 0 and Distance < ClosestPlayer then
 				ClosestPlayer = Distance
 				closest = v.Character
 			end
@@ -53,7 +53,7 @@ getgenv().Teleport = true
 
 while getgenv().Teleport do
 	if GetClosest() then
-		Character.HumanoidRootPart:PivotTo(GetClosest().HumanoidRootPart:GetPivot() + Vector3.new(0, 6, 3))
+		Character.HumanoidRootPart:PivotTo(GetClosest().HumanoidRootPart:GetPivot() + Vector3.new(0, 6, -3))
 	else break end
 	wait(0.2)
 end
