@@ -20,12 +20,23 @@ local Character = game.Players.LocalPlayer.Character
 
 -- [Gun Mods] --
 
-for i, v in next, getgc(true) do
-	if type(v) == 'table' and rawget(v, 'damage') then
-		v.shotrate = 0.00000001
-		v.automatic = true
-		v.damage = math.huge
-		v.velocity = 10000
+local Character = game.Players.LocalPlayer.Character
+
+if not Character then
+	game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
+		Character = char
+	end)
+end	
+getgenv().GunMods = true
+
+if getgenv().GunMods then
+	for i, v in next, getgc(true) do
+		if type(v) == 'table' and rawget(v, 'damage') then
+			v.shotrate = 0.00000001
+			v.automatic = true
+			v.damage = math.huge
+			v.velocity = 1000
+		end
 	end
 end
 
@@ -36,7 +47,7 @@ local closest;
 
 local function GetClosest()
 	for i, v in pairs(game.Players:GetPlayers()) do
-		if v.Character:WaitForChild('Humanoid') and v.Character.Humanoid.Health ~= 0 and v.Team ~= game.Players.LocalPlayer.Team then
+		if Character and Character:FindFirstChild('HumanoidRootPart') and v.Character and v.Character:FindFirstChildOfClass('Humanoid') and v.Character.Humanoid.Health ~= 0 and v.Team ~= game.Players.LocalPlayer.Team then
 			local Distance = math.min(200, (Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).magnitude)
 			if Distance ~= 0 and Distance < ClosestPlayer then
 				ClosestPlayer = Distance
