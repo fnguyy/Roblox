@@ -44,8 +44,21 @@ if not Character then
 			getgenv().Teleport = false
 			getgenv().Aimbot = false
 			Character = nil
-    		end)
+    	end)
 	end)
+end
+
+-- Define a coroutine that waits for Character and its HumanoidRootPart
+local function WaitForCharacter()
+    while not Character or not Character:FindFirstChild('HumanoidRootPart') do
+        wait()
+    end
+    return Character
+end
+
+-- Wrap the coroutine in a function that can be called later
+local function GetCharacter()
+    return WaitForCharacter()
 end
 
 -- [Get Closest Player] --
@@ -54,6 +67,7 @@ local closest;
 
 function GetClosest()
 	local ClosestPlayer = 100
+	local Character = GetCharacter()
 	for i, v in pairs(game.Players:GetPlayers()) do
 		if Character and Character:FindFirstChild('HumanoidRootPart') and v.Character and v.Character:FindFirstChildOfClass('Humanoid') and v.Character.Humanoid.Health ~= 0 and v.Team ~= game.Players.LocalPlayer.Team then
 			local Distance = math.min(50, (Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).magnitude)
@@ -68,16 +82,19 @@ end
 
 -- [Teleport] --
 
+getgenv().Teleport = true
+
 spawn(function()
 	while getgenv().Teleport do
+		local Character = GetCharacter()
 		if Character and Character:FindFirstChild('HumanoidRootPart') then
 			if GetClosest() then
 				local targetPos = GetClosest().HumanoidRootPart.Position + Vector3.new(0, 6, -3)
-               			local tweenInfo = TweenInfo.new((targetPos - Character.HumanoidRootPart.Position).Magnitude/100, Enum.EasingStyle.Linear)
-                		local tween = game:GetService('TweenService'):Create(Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(targetPos)})
-                		tween:Play()
+               	local tweenInfo = TweenInfo.new((targetPos - Character.HumanoidRootPart.Position).Magnitude / 100, Enum.EasingStyle.Linear, Enum.EasingDirection.In)
+                local tween = game:GetService('TweenService'):Create(2, Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(targetPos)})
+                tween:Play()
 			else
-				rconsolewarn('Teleport is OFF, no close Players.') getgenv().Teleport = false
+				rconsolewarn('Teleport is OFF, no close Players.'), getgenv().Teleport = false
 			end
 		end
 		wait(0.2)
@@ -86,15 +103,18 @@ end)
 
 -- [Aimbot] --
 
+getgenv().Aimbot = true
+
 spawn(function()
 	while getgenv().Aimbot do
+		local Character = GetCharacter()
 		if Character and Character:FindFirstChild('HumanoidRootPart') then
 			if GetClosest() and GetClosest().Head then
 				local camera = game:GetService('Workspace').CurrentCamera
-				camera.CFrame = CFrame.new(camera.CFrame.Position, (GetClosest().Head.CFrame - camera.CFrame).magnitude / 100)
+				camera.CFrame = CFrame.new(camera.CFrame.Position, GetClosest().Head.Position)
 				wait()
 			else
-				rconsolewarn('Aimbot is OFF, no close Players.') getgenv().Aimbot = false
+				rconsolewarn('Aimbot is OFF, no close Players.'), getgenv().Aimbot = false
 			end
 		end
 	end
