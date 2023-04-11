@@ -48,17 +48,26 @@ if not Character then
 	end)
 end
 
-while not Character or not Character:FindFirstChild('HumanoidRootPart') do
-    wait()
+-- Define a coroutine that waits for Character and its HumanoidRootPart
+local function WaitForCharacter()
+    while not Character or not Character:FindFirstChild('HumanoidRootPart') do
+        wait()
+    end
+    return Character
+end
+
+-- Wrap the coroutine in a function that can be called later
+local function GetCharacter()
+    return WaitForCharacter()
 end
 
 -- [Get Closest Player] --
 
 local closest;
 
-print('Getting Called!')
 function GetClosest()
 	local ClosestPlayer = 100
+	local Character = GetCharacter()
 	for i, v in pairs(game.Players:GetPlayers()) do
 		if Character and Character:FindFirstChild('HumanoidRootPart') and v.Character and v.Character:FindFirstChildOfClass('Humanoid') and v.Character.Humanoid.Health ~= 0 and v.Team ~= game.Players.LocalPlayer.Team then
 			local Distance = math.min(50, (Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).magnitude)
@@ -75,7 +84,7 @@ end
 
 spawn(function()
 	while getgenv().Teleport do
-		print('Teleport Looping')
+		local Character = GetCharacter()
 		if Character and Character:FindFirstChild('HumanoidRootPart') then
 			if GetClosest() then
 				local targetPos = GetClosest().HumanoidRootPart.Position + Vector3.new(0, 6, -3)
@@ -94,6 +103,7 @@ end)
 
 spawn(function()
 	while getgenv().Aimbot do
+		local Character = GetCharacter()
 		if Character and Character:FindFirstChild('HumanoidRootPart') then
 			if GetClosest() and GetClosest().Head then
 				local camera = game:GetService('Workspace').CurrentCamera
