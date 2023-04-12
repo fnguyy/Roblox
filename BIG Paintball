@@ -75,15 +75,16 @@ local localplayer = players.LocalPlayer
 		
 getgenv().Tracers = true
 		
+local Line = Drawing.new('Line')
+
 spawn(function()
 	if getgenv().Tracers then
 		for i, v in next, players:GetChildren() do
-			local Line = Drawing.new('Line')
 			Line.Thickness = 3
 			Line.Color = Color3.new(1, 0, 0.384313)
 
 			RunService.Heartbeat:Connect(function()
-				if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v ~= localplayer and v.Team ~= localplayer.Team then
+				if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v.Character:FindFirstChild('HumanoidRootPart') and Character and Character:FindFirstChild('HumanoidRootPart') and math.min(50, (Character.HumanoidRootPart - v.Character.HumanoidRootPart).magnitude) and v ~= localplayer and v.Team ~= localplayer.Team then
 					local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
 					
 					if OnScreen then
@@ -105,12 +106,11 @@ players.PlayerAdded:Connect(function()
 	spawn(function()
 		if getgenv().Tracers then
 			for i, v in next, players:GetChildren() do
-				local Line = Drawing.new('Line')
 				Line.Thickness = 3
 				Line.Color = Color3.new(1, 0, 0.384313)
 
 				RunService.Heartbeat:Connect(function()
-					if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v ~= localplayer and v.Team ~= localplayer.Team then
+					if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v.Character:FindFirstChild('HumanoidRootPart') and Character and Character:FindFirstChild('HumanoidRootPart') and math.min(50, (Character.HumanoidRootPart - v.Character.HumanoidRootPart).magnitude) and v ~= localplayer and v.Team ~= localplayer.Team then
 						local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
 						
 						if OnScreen then
@@ -128,6 +128,12 @@ players.PlayerAdded:Connect(function()
 		end
 	end)
 end)
+
+if Character and Character:FindFirstChild('Humanoid') then
+	Character.Humanoid.Died:Connect(function()
+		Line.Visible = false
+	end)
+end
 
 -- [Aimbot] --
 
