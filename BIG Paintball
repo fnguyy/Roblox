@@ -97,7 +97,7 @@ spawn(function()
 					local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
 					
 					if OnScreen then
-						Line.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y * 2)
+						Line.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y)
 						Line.To = Vector2.new(Vector.X, Vector.Y)
 						Line.Visible = getgenv().Tracers
 					else
@@ -123,7 +123,7 @@ players.PlayerAdded:Connect(function()
 						local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
 						
 						if OnScreen then
-							Line.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y * 2)
+							Line.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y)
 							Line.To = Vector2.new(Vector.X, Vector.Y)
 							Line.Visible = getgenv().Tracers
 						else
