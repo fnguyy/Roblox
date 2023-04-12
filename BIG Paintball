@@ -18,7 +18,7 @@ writefile('PAINTBALL DUMP.txt', string)
 
 -- [Delete Invis Walls] --
 
-if workspace.__THINGS.MapCache.Ignore then -- Some maps don't have invis walls :)
+if workspace.__THINGS.MapCache:FindFirstChild('Ignore') then -- Some maps don't have invis walls :)
 	for i, v in next, workspace.__THINGS.MapCache.Ignore:GetChildren() do
 		if v.Name == InvisPart then
 			v:Destroy()
