@@ -93,7 +93,7 @@ spawn(function()
 			Line.Color = Color3.new(1, 0, 0.384313)
 
 			RunService.Heartbeat:Connect(function()
-				if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v.Character:FindFirstChild('HumanoidRootPart') and Character and Character:FindFirstChild('HumanoidRootPart') and math.min(50, (Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position)) and v ~= localplayer and v.Team ~= localplayer.Team then
+				if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v.Character:FindFirstChild('HumanoidRootPart') and Character and Character:FindFirstChild('HumanoidRootPart') and math.min(50, (Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude) and v ~= localplayer and v.Team ~= localplayer.Team then
 					local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
 					
 					if OnScreen then
@@ -119,7 +119,7 @@ players.PlayerAdded:Connect(function()
 				Line.Color = Color3.new(1, 0, 0.384313)
 
 				RunService.Heartbeat:Connect(function()
-					if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v.Character:FindFirstChild('HumanoidRootPart') and Character and Character:FindFirstChild('HumanoidRootPart') and math.min(50, (Character.HumanoidRootPart - v.Character.HumanoidRootPart).magnitude) and v ~= localplayer and v.Team ~= localplayer.Team then
+					if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v.Character:FindFirstChild('HumanoidRootPart') and Character and Character:FindFirstChild('HumanoidRootPart') and math.min(50, (Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude) and v ~= localplayer and v.Team ~= localplayer.Team then
 						local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
 						
 						if OnScreen then
