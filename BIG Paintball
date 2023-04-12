@@ -57,6 +57,18 @@ function GetCharacter()
     return WaitForCharacter()
 end
 
+-- [Locals] --
+
+local players = game:GetService('Players')
+local RunService = game:GetService('RunService')
+local Teams = game:GetService('Teams')
+local user_input_service = game:GetService('UserInputService')
+local workspace = game:GetService('Workspace')
+
+local camera = workspace.CurrentCamera
+local wtvp = camera.WorldToViewportPoint
+local localplayer = players.LocalPlayer
+
 --> ESP <--
 
 --> Tracers <--
@@ -95,18 +107,6 @@ getgenv().Aimbot = true
 
 task.spawn(function()
 	if getgenv().Aimbot then
-
-				-- [Locals] --
-
-		local players = game:GetService('Players')
-		local RunService = game:GetService('RunService')
-		local Teams = game:GetService('Teams')
-		local user_input_service = game:GetService('UserInputService')
-		local workspace = game:GetService('Workspace')
-
-		local camera = workspace.CurrentCamera
-		local wtvp = camera.WorldToViewportPoint
-		local localplayer = players.LocalPlayer
 
 		local function indexExists(object, index)
 		    local _, value = pcall(function() return object[index] end)
