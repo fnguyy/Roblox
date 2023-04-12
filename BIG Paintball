@@ -75,31 +75,59 @@ local localplayer = players.LocalPlayer
 		
 getgenv().Tracers = true
 		
-while getgenv.Tracers do
-	for i, v in next, players:GetChildren() do
-		local Line = Drawing.new('Line')
-		Line.Thickness = 5
-		Line.Color = Color3.new(217, 38, 38)
-		Line.From;
-		Line.To;
+spawn(function()
+	if getgenv().Tracers then
+		for i, v in next, players:GetChildren() do
+			local Line = Drawing.new('Line')
+			Line.Thickness = 5
+			Line.Color = Color3.new(217, 38, 38)
 
-		RunService.Heartbeat:Connect(function()
-			if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and and v ~= localplayer and v.Team ~= localplayer.Team then
-				local Vector, OnScreen = camera:worldToViewPortPoint(v.Character.HumanoidRootPart.Position)
-				
-				if OnScreen then
-					Tracer.From = Vector.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y * 2)
-					Tracer.To = Vector2.new(Vector.X, Vector.Y)
-					Tracer.Visible = getgenv().Tracers
+			RunService.Heartbeat:Connect(function()
+				if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v ~= localplayer and v.Team ~= localplayer.Team then
+					local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
+					
+					if OnScreen then
+						Line.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y * 2)
+						Line.To = Vector2.new(Vector.X, Vector.Y)
+						Line.Visible = getgenv().Tracers
+					else
+						Line.Visible = false
+					end
 				else
-					Tracer.Visible = false
+					Line.Visible = false
 				end
-			end
-		end)
-	else
-		Tracer.Visible = getgenv().Tracers
+			end)
+		end
 	end
-end
+end)
+
+Players.PlayerAdded:Connect(function()
+	spawn(function()
+		if getgenv().Tracers then
+			for i, v in next, players:GetChildren() do
+				local Line = Drawing.new('Line')
+				Line.Thickness = 5
+				Line.Color = Color3.new(217, 38, 38)
+
+				RunService.Heartbeat:Connect(function()
+					if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v ~= localplayer and v.Team ~= localplayer.Team then
+						local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
+						
+						if OnScreen then
+							Line.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y * 2)
+							Line.To = Vector2.new(Vector.X, Vector.Y)
+							Line.Visible = getgenv().Tracers
+						else
+							Line.Visible = false
+						end
+					else
+						Line.Visible = false
+					end
+				end)
+			end
+		end
+	end)
+end)
 
 -- [Aimbot] --
 
@@ -191,7 +219,19 @@ task.spawn(function()
 end)
 
 -- [Fly] --
-function Fly()
+spawn (function()
+	repeat wait()
+	until game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:findFirstChild("Torso") and game.Players.LocalPlayer.Character:findFirstChild("Humanoid")
+	local mouse = game.Players.LocalPlayer:GetMouse()
+	repeat wait() until mouse
+	local plr = game.Players.LocalPlayer
+	local torso = plr.Character.Torso
+	local flying = true
+	local deb = true
+	local ctrl = {f = 0, b = 0, l = 0, r = 0}
+	local lastctrl = {f = 0, b = 0, l = 0, r = 0}
+	local maxspeed = 50
+	local speed = 0
 	local bg = Instance.new("BodyGyro", torso)
 	bg.P = 9e4
 	bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
@@ -233,7 +273,6 @@ function Fly()
 			if flying then flying = false
 			else
 				flying = true
-				Fly()
 			end
 		elseif key:lower() == "w" then
 			ctrl.f = 1
@@ -256,6 +295,4 @@ function Fly()
 			ctrl.r = 0
 		end
 	end)
-	
-	Fly()
-end
+end)
