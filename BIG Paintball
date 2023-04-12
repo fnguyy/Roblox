@@ -20,10 +20,10 @@ writefile('PAINTBALL DUMP.txt', string)
 
 for i, v in next, getgc(true) do
 	if type(v) == 'table' and rawget(v, 'damage') then
-		v.shotrate = 0.00000001
+		v.shotrate = 0.0001
 		v.automatic = true
 		v.damage = math.huge
-		v.velocity = 1000
+		v.velocity = 500
 	end
 end
 
@@ -88,11 +88,11 @@ task.spawn(function()
 		local function is_alive(player) return player.Character and player.Character:FindFirstChild('Humanoid') and player.Character:FindFirstChild('Humanoid').Health > 0 end
 		local function is_team(player) return #Teams:GetChildren() > 0 and player.Team == localplayer.Team end
 
-		shared.fov = 800
+		shared.fov = 1000
 		local circle = Drawing.new('Circle')
 		circle.Thickness = 2
 		circle.NumSides = 64
-		circle.Radius = shared.fov or 800
+		circle.Radius = shared.fov or 1000
 		circle.Filled = false
 		circle.Transparency = 1
 		circle.Color = Color3.new(1, 0, 0.384313)
