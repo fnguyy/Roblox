@@ -18,12 +18,13 @@ writefile('PAINTBALL DUMP.txt', string)
 
 -- [Delete Invis Walls] --
 
-for i, v in next, workspace.__THINGS.MapCache.Ignore:GetChildren() do
-	if v.Name == InvisPart then
-		v:Destroy()
+if workspace.__THINGS.MapCache.Ignore then -- Some maps don't have invis walls :)
+	for i, v in next, workspace.__THINGS.MapCache.Ignore:GetChildren() do
+		if v.Name == InvisPart then
+			v:Destroy()
+		end
 	end
 end
-
 -- [Gun Mods] --
 
 for i, v in next, getgc(true) do
