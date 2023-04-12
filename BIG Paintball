@@ -1,6 +1,6 @@
 --[[
 
--- DUMP THE GOOD SHIT
+--> Dumps the tables with a damage constant <--
 
 local string = '---------------------------------------------'
 
@@ -21,31 +21,17 @@ if not hookmetamethod then game.Players.LocalPlayer:Kick('You need a lv7 Executo
 
 -- [Gun Mods] --
 
-getgenv().GunMods = true
-
-if getgenv().GunMods then
-	for i, v in next, getgc(true) do
-		if type(v) == 'table' and rawget(v, 'damage') then
-			v.shotrate = 0.00000001
-			v.automatic = true
-			v.damage = math.huge
-			v.velocity = 1000
-		end
-	end
-else
-	for i, v in next, getgc(true) do
-		if type(v) == 'table' and rawget(v, 'damage') then
-			v.shotrate = v.shotrate
-			v.automatic = v.automatic
-			v.damage = v.damage
-			v.velocity = v.velocity
-		end
+for i, v in next, getgc(true) do
+	if type(v) == 'table' and rawget(v, 'damage') then
+		v.shotrate = 0.00000001
+		v.automatic = true
+		v.damage = math.huge
+		v.velocity = 1000
 	end
 end
 
 -- [Find Character] --
 
-local UIS = game.UserInputService
 local Character = game.Players.LocalPlayer.Character
 
 if not Character then
@@ -74,75 +60,21 @@ function GetCharacter()
     return WaitForCharacter()
 end
 
+-- [Locals] --
+
+local players = game:GetService('Players')
+local RunService = game:GetService('RunService')
+local Teams = game:GetService('Teams')
+local user_input_service = game:GetService('UserInputService')
+local workspace = game:GetService('Workspace')
+
+local camera = workspace.CurrentCamera
+local wtvp = camera.WorldToViewportPoint
+local localplayer = players.LocalPlayer
+
 -- [Get Closest Player] --
 
-local closest;
-
-function GetClosest()
-	local ClosestPlayer = 100
-	local Character = GetCharacter()
-	for i, v in pairs(game.Players:GetPlayers()) do
-		if Character and Character:FindFirstChild('HumanoidRootPart') and v.Character and v.Character:FindFirstChildOfClass('Humanoid') and v.Character.Humanoid.Health ~= 0 and v.Team ~= game.Players.LocalPlayer.Team then
-			local Distance = math.min(50, (Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).magnitude)
-			if Distance ~= 0 and Distance < ClosestPlayer then
-				ClosestPlayer = Distance
-				closest = v.Character
-			end
-		end
-	end
-	return closest
-end
-
---[[
--- [Teleport] --
-
-getgenv().Teleport = true
-
-spawn(function()
-	while getgenv().Teleport do
-		local Character = GetCharacter()
-		if Character and Character:FindFirstChild('HumanoidRootPart') and Character:FindFirstChild('Humanoid').Health ~= 0 then
-			if GetClosest() then
-				local targetPos = GetClosest().HumanoidRootPart.Position + Vector3.new(0, 6, -3)
-				local tweenInfo = TweenInfo.new((targetPos - Character.HumanoidRootPart.Position).Magnitude / 100, Enum.EasingStyle.Linear, Enum.EasingDirection.In)
-				local tween = game:GetService('TweenService'):Create(Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(targetPos)})
-				tween:Play()
-			end
-		end
-	end
-	wait(0.2)
-end)
-]]--
-
--- [Aimbot] --
-
-getgenv().Aimbot = true
-
-if getgenv().Aimbot then
-
-	local players = game:GetService('Players')
-	local RunService = game:GetService('RunService')
-	local Teams = game:GetService('Teams')
-	local user_input_service = game:GetService('UserInputService')
-	local workspace = game:GetService('Workspace')
-
-	local camera = workspace.CurrentCamera
-	local wtvp = camera.WorldToViewportPoint
-	local localplayer = players.LocalPlayer
-
-	local function indexExists(object, index)
-	    local _, value = pcall(function() return object[index] end)
-	    return value
-	end
-
-	local function get_character(player) return indexExists(player, 'Character') end
-
-	local function get_mouse_location() return user_input_service:GetMouseLocation() end
-
-	local function is_alive(player) return player.Character and player.Character:FindFirstChild('Humanoid') and player.Character:FindFirstChild('Humanoid').Health > 0 end
-	local function is_team(player) return #Teams:GetChildren() > 0 and player.Team == localplayer.Team end
-
-	local function getClosestPlayerToCursor(fov)
+local function getClosestPlayerToCursor(fov)
 
 	    local maxDistance = fov or math.huge
 
@@ -168,11 +100,29 @@ if getgenv().Aimbot then
 	    return closestPlayer
 	end
 
-	shared.fov = 400
+-- [Aimbot] --
+
+getgenv().Aimbot = true
+
+if getgenv().Aimbot then
+
+	local function indexExists(object, index)
+	    local _, value = pcall(function() return object[index] end)
+	    return value
+	end
+
+	local function get_character(player) return indexExists(player, 'Character') end
+
+	local function get_mouse_location() return user_input_service:GetMouseLocation() end
+
+	local function is_alive(player) return player.Character and player.Character:FindFirstChild('Humanoid') and player.Character:FindFirstChild('Humanoid').Health > 0 end
+	local function is_team(player) return #Teams:GetChildren() > 0 and player.Team == localplayer.Team end
+
+	shared.fov = 800
 	local circle = Drawing.new('Circle')
 	circle.Thickness = 2
 	circle.NumSides = 64
-	circle.Radius = shared.fov or 400
+	circle.Radius = shared.fov or 800
 	circle.Filled = false
 	circle.Transparency = 1
 	circle.Color = Color3.new(1, 0, 0.384313)
@@ -205,3 +155,74 @@ if getgenv().Aimbot then
 	    return OldNamecall(...)
 	end))
 end
+
+-- [Fly] --
+function Fly()
+	local bg = Instance.new("BodyGyro", torso)
+	bg.P = 9e4
+	bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+	bg.cframe = torso.CFrame
+	local bv = Instance.new("BodyVelocity", torso)
+	bv.velocity = Vector3.new(0,0.1,0)
+	bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+	repeat wait()
+		plr.Character.Humanoid.PlatformStand = true
+		if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+			speed = speed+.5+(speed/maxspeed)
+			if speed > maxspeed then
+				speed = maxspeed
+			end
+		elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then
+			speed = speed-1
+			if speed < 0 then
+				speed = 0
+			end
+		end
+		if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then
+			bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+			lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
+		elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then
+			bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+		else
+			bv.velocity = Vector3.new(0,0.1,0)
+		end
+		bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0)
+		until not flying
+		ctrl = {f = 0, b = 0, l = 0, r = 0}
+		lastctrl = {f = 0, b = 0, l = 0, r = 0}
+		speed = 0
+		bg:Destroy()
+		bv:Destroy()
+		plr.Character.Humanoid.PlatformStand = false
+	end
+	mouse.KeyDown:connect(function(key)
+		if key:lower() == "e" then
+			if flying then flying = false
+			else
+				flying = true
+				Fly()
+			end
+		elseif key:lower() == "w" then
+			ctrl.f = 1
+		elseif key:lower() == "s" then
+			ctrl.b = -1
+		elseif key:lower() == "a" then
+			ctrl.l = -1
+		elseif key:lower() == "d" then
+			ctrl.r = 1
+		end
+	end)
+	mouse.KeyUp:connect(function(key)
+		if key:lower() == "w" then
+			ctrl.f = 0
+		elseif key:lower() == "s" then
+			ctrl.b = 0
+		elseif key:lower() == "a" then
+			ctrl.l = 0
+		elseif key:lower() == "d" then
+			ctrl.r = 0
+		end
+	end)
+	Fly()
+
+end)
