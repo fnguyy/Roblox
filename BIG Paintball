@@ -80,6 +80,13 @@ local localplayer = players.LocalPlayer
 
 --> Chams <--
 
+getgenv().Chams = true
+
+local Chams = Instance.new('Highlight')
+Chams.Name = 'Chams'
+
+--https://www.youtube.com/watch?v=5lhCS5ey31k FINISH CODING BOZO!
+
 --> Tracers <--
 		
 getgenv().Tracers = true
