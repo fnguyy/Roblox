@@ -94,8 +94,8 @@ local function getClosestPlayerToCursor(fov)
 		end
 	    end
 
-	    return closestPlayer
-	end
+	return closestPlayer
+end
 
 -- [Aimbot] --
 
