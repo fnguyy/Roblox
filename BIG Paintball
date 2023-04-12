@@ -184,14 +184,13 @@ function Fly()
 			bv.velocity = Vector3.new(0,0.1,0)
 		end
 		bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0)
-		until not flying
+	until not flying
 		ctrl = {f = 0, b = 0, l = 0, r = 0}
 		lastctrl = {f = 0, b = 0, l = 0, r = 0}
 		speed = 0
 		bg:Destroy()
 		bv:Destroy()
 		plr.Character.Humanoid.PlatformStand = false
-	end
 	mouse.KeyDown:connect(function(key)
 		if key:lower() == "e" then
 			if flying then flying = false
@@ -220,6 +219,6 @@ function Fly()
 			ctrl.r = 0
 		end
 	end)
+	
 	Fly()
-
-end)
+end
