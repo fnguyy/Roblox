@@ -57,6 +57,38 @@ function GetCharacter()
     return WaitForCharacter()
 end
 
+--> ESP <--
+
+--> Tracers <--
+		
+getgenv().Tracers = true
+		
+while getgenv.Tracers do
+	for i, v in next, players:GetChildren() do
+		local Line = Drawing.new('Line')
+		Line.Thickness = 5
+		Line.Color = Color3.new(217, 38, 38)
+		Line.From;
+		Line.To;
+
+		RunService.Heartbeat:Connect(function()
+			if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and and v ~= localplayer and v.Team ~= localplayer.Team then
+				local Vector, OnScreen = camera:worldToViewPortPoint(v.Character.HumanoidRootPart.Position)
+				
+				if OnScreen then
+					Tracer.From = Vector.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y * 2)
+					Tracer.To = Vector2.new(Vector.X, Vector.Y)
+					Tracer.Visible = getgenv().Tracers
+				else
+					Tracer.Visible = false
+				end
+			end
+		end)
+	else
+		Tracer.Visible = getgenv().Tracers
+	end
+end
+
 -- [Aimbot] --
 
 getgenv().Aimbot = true
@@ -87,16 +119,18 @@ task.spawn(function()
 
 		local function is_alive(player) return player.Character and player.Character:FindFirstChild('Humanoid') and player.Character:FindFirstChild('Humanoid').Health > 0 end
 		local function is_team(player) return #Teams:GetChildren() > 0 and player.Team == localplayer.Team end
-
-		shared.fov = 1000
+		
+		--> FOV <--
+		
+		shared.fov = 800
 		local circle = Drawing.new('Circle')
 		circle.Thickness = 2
 		circle.NumSides = 64
-		circle.Radius = shared.fov or 1000
+		circle.Radius = shared.fov or 800
 		circle.Filled = false
 		circle.Transparency = 1
 		circle.Color = Color3.new(1, 0, 0.384313)
-		circle.Visible = true
+		circle.Visible = false -- Make it changable
 		local target = nil
 
 	--> [Get Closest Player] <--
