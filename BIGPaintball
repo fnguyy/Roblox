@@ -110,29 +110,30 @@ function Trace()
 
 	players.PlayerAdded:Connect(function()
 		spawn(function()
-		if getgenv().Tracers then
-			for i, v in next, players:GetChildren() do
-				local Line = Drawing.new('Line')
-				Line.Thickness = 3
-				Line.Color = Color3.new(1, 0, 0.384313)
+			if getgenv().Tracers then
+				for i, v in next, players:GetChildren() do
+					local Line = Drawing.new('Line')
+					Line.Thickness = 3
+					Line.Color = Color3.new(1, 0, 0.384313)
 
-				RunService.Heartbeat:Connect(function()
-					if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v.Character:FindFirstChild('HumanoidRootPart') and v ~= localplayer and v.Team ~= localplayer.Team then
-						local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
+					RunService.Heartbeat:Connect(function()
+						if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v.Character:FindFirstChild('HumanoidRootPart') and v ~= localplayer and v.Team ~= localplayer.Team then
+							local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
 
-						if OnScreen then
-							Line.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y)
-							Line.To = Vector2.new(Vector.X, Vector.Y)
-							Line.Visible = getgenv().Tracers
+							if OnScreen then
+								Line.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y)
+								Line.To = Vector2.new(Vector.X, Vector.Y)
+								Line.Visible = getgenv().Tracers
+							else
+								Line.Visible = false
+							end
 						else
 							Line.Visible = false
 						end
-					else
-						Line.Visible = false
-					end
-				end)
+					end)
+				end
 			end
-		end
+		end)
 	end)
 
 	if Character and Character:FindFirstChild('Humanoid') then
@@ -253,3 +254,76 @@ old = hookmetamethod(game, "__index", function(self, key)
 	end
 	return old(self, key)
 end)
+
+local lp = game:GetService('Players').LocalPlayer
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+
+if game.PlaceId == 3527629287 then
+
+    local Window = OrionLib:MakeWindow({Name = "OP | Big Paintball", HidePremium = true, IntroText = "Made By BA3981", SaveConfig = false})
+
+    -- [TABS] --
+
+    local MainTab = Window:MakeTab({
+        Name = "Main",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+
+    local VisualsTab = Window:MakeTab({
+        Name = "Visuals",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+
+    -- [BUTTONS] --
+
+    MainTab:AddButton({
+        Name = "GunMods",
+        Callback = function()
+                for i, v in next, getgc(true) do
+                    if type(v) == 'table' and rawget(v, 'damage') then
+                        v.shotrate = 0.0001
+                        v.automatic = true
+                        v.damage = math.huge
+                        v.velocity = 500
+                    end
+                end
+          end    
+    })
+
+    -- [TOGGLES] --
+
+    MainTab:AddToggle({
+        Name = "Aimbot",
+        Default = false,
+        Callback = function(Value)
+            getgenv().Aimbot = Value
+            Aim()
+        end    
+    })
+
+    VisualsTab:AddToggle({
+        Name = "Tracers",
+        Default = false,
+        Callback = function(Value)
+            getgenv().Tracers = Value
+            Trace()
+        end    
+    })
+
+        OrionLib:MakeNotification({
+            Name = "OP | Big Paintball",
+            Content = "Successfully Loaded.",
+            Image = "rbxassetid://4483345998",
+            Time = 5
+        })
+else
+    OrionLib:MakeNotification({
+        Name = "OP | Big Paintball",
+        Content = "This is not Big Paintball.",
+        Image = "rbxassetid://4483345998",
+        Time = 5
+    })
+end
+OrionLib:Init()
