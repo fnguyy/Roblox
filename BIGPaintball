@@ -109,33 +109,34 @@ end)
 
 players.PlayerAdded:Connect(function()
 	spawn(function()
-		if getgenv().Tracers then
-			for i, v in next, players:GetChildren() do
-				Line.Thickness = 3
-				Line.Color = Color3.new(1, 0, 0.384313)
+	if getgenv().Tracers then
+		for i, v in next, players:GetChildren() do
+			local Line = Drawing.new('Line')
+			Line.Thickness = 3
+			Line.Color = Color3.new(1, 0, 0.384313)
 
-				RunService.Heartbeat:Connect(function()
-					if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v.Character:FindFirstChild('HumanoidRootPart') and v ~= localplayer and v.Team ~= localplayer.Team then
-						local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
-						
-						if OnScreen then
-							Line.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y)
-							Line.To = Vector2.new(Vector.X, Vector.Y)
-							Line.Visible = getgenv().Tracers
-						else
-							Line.Visible = false
-						end
+			RunService.Heartbeat:Connect(function()
+				if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v.Character:FindFirstChild('HumanoidRootPart') and v ~= localplayer and v.Team ~= localplayer.Team then
+					local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
+					
+					if OnScreen then
+						Line.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y)
+						Line.To = Vector2.new(Vector.X, Vector.Y)
+						Line.Visible = getgenv().Tracers
 					else
 						Line.Visible = false
 					end
-				end)
-			end
+				else
+					Line.Visible = false
+				end
+			end)
 		end
-	end)
+	end
 end)
 
 if Character and Character:FindFirstChild('Humanoid') then
 	Character.Humanoid.Died:Connect(function()
+		local Line = Drawing.new('Line')
 		Line.Visible = false
 	end)
 end
@@ -172,33 +173,33 @@ spawn(function()
 		circle.Visible = false -- Make it changable
 		local target = nil
 
-	    --> [Get Closest Player] <--
+	    	--> [Get Closest Player] <--
 
-        local function getClosestPlayerToCursor(fov)
+		local function getClosestPlayerToCursor(fov)
 
-                local maxDistance = fov or math.huge
+			local maxDistance = fov or math.huge
 
-                local closestPlayer = nil
-                local closestPlayerDistance = math.huge
+			local closestPlayer = nil
+			local closestPlayerDistance = math.huge
 
-                for _, player in pairs(players:GetPlayers()) do
+			for _, player in pairs(players:GetPlayers()) do
 
-                if player ~= localplayer and not is_team(player) and get_character(player) and is_alive(player) and get_character(player).Head then
-                    local pos, on_screen = wtvp(camera, get_character(player).Head.Position)
+				if player ~= localplayer and not is_team(player) and get_character(player) and is_alive(player) and get_character(player).Head then
+				    local pos, on_screen = wtvp(camera, get_character(player).Head.Position)
 
-                    if not on_screen then continue end
+				    if not on_screen then continue end
 
-                    local distance = (get_mouse_location() - Vector2.new(pos.X, pos.Y)).magnitude
+				    local distance = (get_mouse_location() - Vector2.new(pos.X, pos.Y)).magnitude
 
-                    if distance <= maxDistance and distance < closestPlayerDistance then
-                    closestPlayer = player
-                    closestPlayerDistance = distance
-                    end
-                end
-                end
+				    if distance <= maxDistance and distance < closestPlayerDistance then
+					closestPlayer = player
+					closestPlayerDistance = distance
+				    end
+				end
+			end
 
-            return closestPlayer
-        end
+		    return closestPlayer
+		end
 
 		RunService.Heartbeat:Connect(function(deltaTime)
 		    task.wait(deltaTime ^ 2)
