@@ -80,12 +80,11 @@ Chams.Name = 'Chams'
 --> Tracers <--
 		
 getgenv().Tracers = false
-		
-local Line = Drawing.new('Line')
 
 spawn(function()
 	if getgenv().Tracers then
 		for i, v in next, players:GetChildren() do
+			local Line = Drawing.new('Line')
 			Line.Thickness = 3
 			Line.Color = Color3.new(1, 0, 0.384313)
 
