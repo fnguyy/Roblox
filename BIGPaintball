@@ -16,253 +16,244 @@ end
 writefile('PAINTBALL DUMP.txt', string)
 ]]--
 
--- [Delete Invis Walls] --
+if game.PlaceId == 3527629287 then
 
-if workspace.__THINGS.MapCache:FindFirstChild('Ignore') then -- Some maps don't have invis walls :)
-	for i, v in next, workspace.__THINGS.MapCache.Ignore:GetChildren() do
-		if v.Name == InvisPart then
-			v:Destroy()
-		end
-	end
-end
+    -- [Delete Invis Walls] --
 
--- [Find Character] --
-
-local Character = game.Players.LocalPlayer.Character
-
-if not Character then
-	game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
-		getgenv().Teleport = true
-		getgenv().Aimbot = true
-		Character = char
-		Character:WaitForChild('Humanoid').Died:Connect(function()
-			getgenv().Teleport = false
-			getgenv().Aimbot = false
-			Character = nil
-    	end)
-	end)
-end
-
--- Define a coroutine that waits for Character and its HumanoidRootPart
-function WaitForCharacter()
-    while not Character or not Character:FindFirstChild('HumanoidRootPart') do
-        wait()
+    if workspace.__THINGS.MapCache:FindFirstChild('Ignore') then -- Some maps don't have invis walls :)
+        for i, v in next, workspace.__THINGS.MapCache.Ignore:GetChildren() do
+            if v.Name == InvisPart then
+                v:Destroy()
+            end
+        end
     end
-    return Character
-end
 
--- Wrap the coroutine in a function that can be called later
-function GetCharacter()
-    return WaitForCharacter()
-end
+    -- [Find Character] --
 
--- [Locals] --
+    local Character = game.Players.LocalPlayer.Character
 
-local players = game:GetService('Players')
-local RunService = game:GetService('RunService')
-local Teams = game:GetService('Teams')
-local user_input_service = game:GetService('UserInputService')
-local workspace = game:GetService('Workspace')
+    if not Character then
+        game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
+            getgenv().Teleport = true
+            getgenv().Aimbot = true
+            Character = char
+            Character:WaitForChild('Humanoid').Died:Connect(function()
+                getgenv().Teleport = false
+                getgenv().Aimbot = false
+                Character = nil
+            end)
+        end)
+    end
 
-local camera = workspace.CurrentCamera
-local wtvp = camera.WorldToViewportPoint
-local localplayer = players.LocalPlayer
+    -- Define a coroutine that waits for Character and its HumanoidRootPart
+    function WaitForCharacter()
+        while not Character or not Character:FindFirstChild('HumanoidRootPart') do
+            wait()
+        end
+        return Character
+    end
 
---> Chams <--
+    -- Wrap the coroutine in a function that can be called later
+    function GetCharacter()
+        return WaitForCharacter()
+    end
 
-getgenv().Chams = true
+    -- [Locals] --
 
-local Chams = Instance.new('Highlight')
-Chams.Name = 'Chams'
+    local players = game:GetService('Players')
+    local RunService = game:GetService('RunService')
+    local Teams = game:GetService('Teams')
+    local user_input_service = game:GetService('UserInputService')
+    local workspace = game:GetService('Workspace')
 
---https://www.youtube.com/watch?v=5lhCS5ey31k FINISH CODING BOZO!
+    local camera = workspace.CurrentCamera
+    local wtvp = camera.WorldToViewportPoint
+    local localplayer = players.LocalPlayer
 
---> Tracers <--
-		
-getgenv().Tracers = false
+    --> Chams <--
 
-function Trace()
-	spawn(function()
-		if getgenv().Tracers then
-			for i, v in next, players:GetChildren() do
-				local Line = Drawing.new('Line')
-				Line.Thickness = 3
-				Line.Color = Color3.new(1, 0, 0.384313)
+    getgenv().Chams = true
 
-				RunService.Heartbeat:Connect(function()
-					if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v.Character:FindFirstChild('HumanoidRootPart') and v ~= localplayer and v.Team ~= localplayer.Team then
-						local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
+    local Chams = Instance.new('Highlight')
+    Chams.Name = 'Chams'
 
-						if OnScreen then
-							Line.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y)
-							Line.To = Vector2.new(Vector.X, Vector.Y)
-							Line.Visible = getgenv().Tracers
-						else
-							Line.Visible = false
-						end
-					else
-						Line.Visible = false
-					end
-				end)
-			end
-		end
-	end)
+    --https://www.youtube.com/watch?v=5lhCS5ey31k FINISH CODING BOZO!
 
-	players.PlayerAdded:Connect(function()
-		spawn(function()
-			if getgenv().Tracers then
-				for i, v in next, players:GetChildren() do
-					local Line = Drawing.new('Line')
-					Line.Thickness = 3
-					Line.Color = Color3.new(1, 0, 0.384313)
+    --> Tracers <--
+            
+    getgenv().Tracers = false
 
-					RunService.Heartbeat:Connect(function()
-						if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v.Character:FindFirstChild('HumanoidRootPart') and v ~= localplayer and v.Team ~= localplayer.Team then
-							local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
+    function Trace()
+        spawn(function()
+            if getgenv().Tracers then
+                for i, v in next, players:GetChildren() do
+                    local Line = Drawing.new('Line')
+                    Line.Thickness = 3
+                    Line.Color = Color3.new(1, 0, 0.384313)
 
-							if OnScreen then
-								Line.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y)
-								Line.To = Vector2.new(Vector.X, Vector.Y)
-								Line.Visible = getgenv().Tracers
-							else
-								Line.Visible = false
-							end
-						else
-							Line.Visible = false
-						end
-					end)
-				end
-			end
-		end)
-	end)
+                    RunService.Heartbeat:Connect(function()
+                        if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v.Character:FindFirstChild('HumanoidRootPart') and v ~= localplayer and v.Team ~= localplayer.Team then
+                            local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
 
-	if Character and Character:FindFirstChild('Humanoid') then
-		Character.Humanoid.Died:Connect(function()
-			local Line = Drawing.new('Line')
-			Line.Visible = false
-		end)
-	end
-end
+                            if OnScreen then
+                                Line.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y)
+                                Line.To = Vector2.new(Vector.X, Vector.Y)
+                                Line.Visible = getgenv().Tracers
+                            else
+                                Line.Visible = false
+                            end
+                        else
+                            Line.Visible = false
+                        end
+                    end)
+                end
+            end
+        end)
 
--- [Aimbot] --
+        players.PlayerAdded:Connect(function()
+            spawn(function()
+                if getgenv().Tracers then
+                    for i, v in next, players:GetChildren() do
+                        local Line = Drawing.new('Line')
+                        Line.Thickness = 3
+                        Line.Color = Color3.new(1, 0, 0.384313)
 
-getgenv().Aimbot = false
+                        RunService.Heartbeat:Connect(function()
+                            if v.Character and v.Character:FindFirstChild('Humanoid') and v.Character:FindFirstChild('Humanoid').Health ~= 0 and v.Character:FindFirstChild('HumanoidRootPart') and v ~= localplayer and v.Team ~= localplayer.Team then
+                                local Vector, OnScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
 
-function Aim()
-	spawn(function()
-		if getgenv().Aimbot then
+                                if OnScreen then
+                                    Line.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y)
+                                    Line.To = Vector2.new(Vector.X, Vector.Y)
+                                    Line.Visible = getgenv().Tracers
+                                else
+                                    Line.Visible = false
+                                end
+                            else
+                                Line.Visible = false
+                            end
+                        end)
+                    end
+                end
+            end)
+        end)
 
-			local function indexExists(object, index)
-			    local _, value = pcall(function() return object[index] end)
-			    return value
-			end
+        if Character and Character:FindFirstChild('Humanoid') then
+            Character.Humanoid.Died:Connect(function()
+                local Line = Drawing.new('Line')
+                Line.Visible = false
+            end)
+        end
+    end
 
-			local function get_character(player) return indexExists(player, 'Character') end
+    -- [Aimbot] --
 
-			local function get_mouse_location() return user_input_service:GetMouseLocation() end
+    getgenv().Aimbot = false
+    shared.fov;
+    local circle = Drawing.new('Circle')
+    circle.NumSides = 64
+    circle.Filled = false
 
-			local function is_alive(player) return player.Character and player.Character:FindFirstChild('Humanoid') and player.Character:FindFirstChild('Humanoid').Health > 0 end
-			local function is_team(player) return #Teams:GetChildren() > 0 and player.Team == localplayer.Team end
+    function Aim()
+        spawn(function()
+            if getgenv().Aimbot then
 
-			--> FOV <--
+                local function indexExists(object, index)
+                    local _, value = pcall(function() return object[index] end)
+                    return value
+                end
 
-			shared.fov = 800
-			local circle = Drawing.new('Circle')
-			circle.Thickness = 2
-			circle.NumSides = 64
-			circle.Radius = shared.fov or 800
-			circle.Filled = false
-			circle.Transparency = 1
-			circle.Color = Color3.new(1, 0, 0.384313)
-			circle.Visible = false -- Make it changable
-			local target = nil
+                local function get_character(player) return indexExists(player, 'Character') end
 
-			--> [Get Closest Player] <--
+                local function get_mouse_location() return user_input_service:GetMouseLocation() end
 
-			local function getClosestPlayerToCursor(fov)
+                local function is_alive(player) return player.Character and player.Character:FindFirstChild('Humanoid') and player.Character:FindFirstChild('Humanoid').Health > 0 end
+                local function is_team(player) return #Teams:GetChildren() > 0 and player.Team == localplayer.Team end
 
-				local maxDistance = fov or math.huge
+                --> FOV <--
 
-				local closestPlayer = nil
-				local closestPlayerDistance = math.huge
+                circle.Visible = false
+                local target = nil
 
-				for _, player in pairs(players:GetPlayers()) do
+                --> [Get Closest Player] <--
 
-					if player ~= localplayer and not is_team(player) and get_character(player) and is_alive(player) and get_character(player).Head then
-					    local pos, on_screen = wtvp(camera, get_character(player).Head.Position)
+                local function getClosestPlayerToCursor(fov)
 
-					    if not on_screen then continue end
+                    local maxDistance = fov or math.huge
 
-					    local distance = (get_mouse_location() - Vector2.new(pos.X, pos.Y)).magnitude
+                    local closestPlayer = nil
+                    local closestPlayerDistance = math.huge
 
-					    if distance <= maxDistance and distance < closestPlayerDistance then
-						closestPlayer = player
-						closestPlayerDistance = distance
-					    end
-					end
-				end
+                    for _, player in pairs(players:GetPlayers()) do
 
-			    return closestPlayer
-			end
+                        if player ~= localplayer and not is_team(player) and get_character(player) and is_alive(player) and get_character(player).Head then
+                            local pos, on_screen = wtvp(camera, get_character(player).Head.Position)
 
-			RunService.Heartbeat:Connect(function(deltaTime)
-			    task.wait(deltaTime ^ 2)
-			    target = getClosestPlayerToCursor(shared.fov)
-			    circle.Position = get_mouse_location()
-			end)
+                            if not on_screen then continue end
 
-			local OldNamecall
-			OldNamecall = hookmetamethod(workspace, '__namecall', newcclosure(function(...)
-			    local args = { ... }
-			    local method = string.lower(getnamecallmethod())
-			    local caller = getcallingscript()
-			    if method == 'findpartonraywithwhitelist' and tostring(caller) == 'First Person Controller' then
+                            local distance = (get_mouse_location() - Vector2.new(pos.X, pos.Y)).magnitude
 
-				local HitPart = target and target.Character and target.Character.Head or nil
-				if HitPart then
-				    local Origin = HitPart.Position + Vector3.new(0, 5, 0)
-				    local Direction = (HitPart.Position - Origin)
-				    args[2] = Ray.new(Origin, Direction)
+                            if distance <= maxDistance and distance < closestPlayerDistance then
+                            closestPlayer = player
+                            closestPlayerDistance = distance
+                            end
+                        end
+                    end
 
-				    return OldNamecall(unpack(args))
-				else
-				    return OldNamecall(...)
-				end
-			    end
-			    return OldNamecall(...)
-			end))
-		end
-	end)
-end
+                    return closestPlayer
+                end
 
--- [Fly] --
+                RunService.Heartbeat:Connect(function(deltaTime)
+                    task.wait(deltaTime ^ 2)
+                    target = getClosestPlayerToCursor(shared.fov or 300)
+                    circle.Position = get_mouse_location()
+                end)
 
-loadstring(game:HttpGet("https://pastebin.com/raw/9tZMx4SW"))()
+                local OldNamecall
+                OldNamecall = hookmetamethod(workspace, '__namecall', newcclosure(function(...)
+                    local args = { ... }
+                    local method = string.lower(getnamecallmethod())
+                    local caller = getcallingscript()
+                    if method == 'findpartonraywithwhitelist' and tostring(caller) == 'First Person Controller' then
 
---> Fly Hook <--
+                    local HitPart = target and target.Character and target.Character.Head or nil
+                    if HitPart then
+                        local Origin = HitPart.Position + Vector3.new(0, 5, 0)
+                        local Direction = (HitPart.Position - Origin)
+                        args[2] = Ray.new(Origin, Direction)
 
-local old;
-old = hookmetamethod(game, "__index", function(self, key)
-	if not checkcaller() and key == "PlatformStand" and self.ClassName == "Humanoid" and self.Parent and plr.Character and self.Parent == plr.Character then -- Prevents PlatformStanding detections
-      return false
-	end
-	if not checkcaller() and key == "WalkSpeed" and self.ClassName == "Humanoid" and self.Parent and plr.Character and self.Parent == plr.Character then -- Prevents PlatformStanding detections
-      return false
-	end
-	if not checkcaller() and key == "Kick" and self.ClassName == "Humanoid" and self.Parent and plr.Character and self.Parent == plr.Character then -- Prevents PlatformStanding detections
-      return false
-	end
-	return old(self, key)
-end)
+                        return OldNamecall(unpack(args))
+                    else
+                        return OldNamecall(...)
+                    end
+                    end
+                    return OldNamecall(...)
+                end))
+            end
+        end)
+    end
 
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    -- [Fly] --
+
+    loadstring(game:HttpGet("https://pastebin.com/raw/9tZMx4SW"))()
+
+    --> Fly Hook <--
+
+    local old;
+    old = hookmetamethod(game, "__index", function(self, key)
+        if not checkcaller() and key == "PlatformStand" and self.ClassName == "Humanoid" and self.Parent and plr.Character and self.Parent == plr.Character then -- Prevents PlatformStanding detections
+        return false
+        end
+        if not checkcaller() and key == "WalkSpeed" and self.ClassName == "Humanoid" and self.Parent and plr.Character and self.Parent == plr.Character then -- Prevents WalkSpeed detections
+        return false
+        end
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- [MENU] --
 
-local lp = game:GetService('Players').LocalPlayer
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-
-if game.PlaceId == 3527629287 then
+    local lp = game:GetService('Players').LocalPlayer
+    local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
     local Window = OrionLib:MakeWindow({Name = "OP | Big Paintball", HidePremium = true, IntroText = "Made By BA3981", SaveConfig = false})
 
@@ -276,6 +267,12 @@ if game.PlaceId == 3527629287 then
 
     local VisualsTab = Window:MakeTab({
         Name = "Visuals",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+
+    local MiscTab = Window:MakeTab({
+        Name = "Miscs",
         Icon = "rbxassetid://4483345998",
         PremiumOnly = false
     })
@@ -296,7 +293,23 @@ if game.PlaceId == 3527629287 then
           end    
     })
 
+    -- [KEYBINDS] --
+
+    MiscTab:AddBind({
+        Name = "Fly",
+        Default = Enum.KeyCode.E,
+        Hold = false,
+        Callback = function()
+            flying = true
+            Fly()
+        end    
+    })
+
     -- [TOGGLES] --
+
+    local Section = MainTab:AddSection({
+        Name = "AimBot Settings"
+    })
 
     MainTab:AddToggle({
         Name = "Aimbot",
@@ -307,12 +320,50 @@ if game.PlaceId == 3527629287 then
         end    
     })
 
+    MainTab:AddToggle({
+        Name = "FOV Circle",
+        Default = false,
+        Callback = function(Value)
+            circle.Visible = Value
+        end    
+    })
+
+    MainTab:AddColorpicker({
+        Name = "FOV Color",
+        Default = Color3.fromRGB(255, 13, 0),
+        Callback = function(Value)
+            circle.Color = Color3.fromRGB(Value)
+        end	  
+    })
+
+    MainTab:AddSlider({
+        Name = "FOV Size",
+        Min = 1,
+        Max = 100,
+        Default = 30,
+        Color = Color3.fromRGB(255,255,255),
+        Increment = 1,
+        ValueName = "",
+        Callback = function(Value)
+            shared.fov = Value * 10
+        end    
+    })
+
     VisualsTab:AddToggle({
         Name = "Tracers",
         Default = false,
         Callback = function(Value)
             getgenv().Tracers = Value
             Trace()
+        end    
+    })
+
+    VisualsTab:AddToggle({
+        Name = "Chams [WIP]",
+        Default = false,
+        Callback = function(Value)
+            getgenv().Chams = Value
+            -- call Chams Function
         end    
     })
 
