@@ -3,7 +3,7 @@ local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shl
 
 if game.PlaceId == 3527629287 then
 
-    local Window = OrionLib:MakeWindow({Name = "OP | Big Paintball", HidePremium = true, IntroText = "Made By BA3981", SaveConfig = true, ConfigFolder = "BIGPaintballConfig"})
+    local Window = OrionLib:MakeWindow({Name = "OP | Big Paintball", HidePremium = true, IntroText = "Made By BA3981", SaveConfig = false})
 
     -- [TABS] --
 
