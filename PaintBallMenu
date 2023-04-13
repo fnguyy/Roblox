@@ -45,7 +45,7 @@ if game.PlaceId == 3527629287 then
         end    
     })
 
-    Tab:AddToggle({
+    VisualsTab:AddToggle({
         Name = "Tracers",
         Default = false,
         Callback = function(Value)
