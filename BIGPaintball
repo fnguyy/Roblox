@@ -173,33 +173,33 @@ spawn(function()
 		circle.Visible = false -- Make it changable
 		local target = nil
 
-	--> [Get Closest Player] <--
+	    --> [Get Closest Player] <--
 
-	local function getClosestPlayerToCursor(fov)
+        local function getClosestPlayerToCursor(fov)
 
-		    local maxDistance = fov or math.huge
+                local maxDistance = fov or math.huge
 
-		    local closestPlayer = nil
-		    local closestPlayerDistance = math.huge
+                local closestPlayer = nil
+                local closestPlayerDistance = math.huge
 
-		    for _, player in pairs(players:GetPlayers()) do
+                for _, player in pairs(players:GetPlayers()) do
 
-			if player ~= localplayer and not is_team(player) and get_character(player) and is_alive(player) and get_character(player).Head then
-			    local pos, on_screen = wtvp(camera, get_character(player).Head.Position)
+                if player ~= localplayer and not is_team(player) and get_character(player) and is_alive(player) and get_character(player).Head then
+                    local pos, on_screen = wtvp(camera, get_character(player).Head.Position)
 
-			    if not on_screen then continue end
+                    if not on_screen then continue end
 
-			    local distance = (get_mouse_location() - Vector2.new(pos.X, pos.Y)).magnitude
+                    local distance = (get_mouse_location() - Vector2.new(pos.X, pos.Y)).magnitude
 
-			    if distance <= maxDistance and distance < closestPlayerDistance then
-				closestPlayer = player
-				closestPlayerDistance = distance
-			    end
-			end
-		    end
+                    if distance <= maxDistance and distance < closestPlayerDistance then
+                    closestPlayer = player
+                    closestPlayerDistance = distance
+                    end
+                end
+                end
 
-		return closestPlayer
-	end
+            return closestPlayer
+        end
 
 		RunService.Heartbeat:Connect(function(deltaTime)
 		    task.wait(deltaTime ^ 2)
