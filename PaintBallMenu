@@ -41,7 +41,7 @@ if game.PlaceId == 3527629287 then
         Name = "Aimbot",
         Default = false,
         Callback = function(Value)
-            getgenv().Aimbot = true
+            getgenv().Aimbot = Value
         end    
     })
 
@@ -49,7 +49,7 @@ if game.PlaceId == 3527629287 then
         Name = "Tracers",
         Default = false,
         Callback = function(Value)
-            getgenv().Tracers = true
+            getgenv().Tracers = Value
         end    
     })
 
