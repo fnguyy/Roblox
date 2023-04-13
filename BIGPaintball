@@ -255,6 +255,10 @@ old = hookmetamethod(game, "__index", function(self, key)
 	return old(self, key)
 end)
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- [MENU] --
+
 local lp = game:GetService('Players').LocalPlayer
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
