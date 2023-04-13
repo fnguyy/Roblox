@@ -79,7 +79,7 @@ Chams.Name = 'Chams'
 
 --> Tracers <--
 		
-getgenv().Tracers = false
+getgenv().Tracers;
 		
 local Line = Drawing.new('Line')
 
@@ -143,9 +143,9 @@ end
 
 -- [Aimbot] --
 
-getgenv().Aimbot = false
+getgenv().Aimbot;
 
-task.spawn(function()
+spawn(function()
 	if getgenv().Aimbot then
 
 		local function indexExists(object, index)
