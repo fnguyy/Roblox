@@ -25,16 +25,6 @@ if workspace.__THINGS.MapCache:FindFirstChild('Ignore') then -- Some maps don't 
 		end
 	end
 end
--- [Gun Mods] --
-
-for i, v in next, getgc(true) do
-	if type(v) == 'table' and rawget(v, 'damage') then
-		v.shotrate = 0.0001
-		v.automatic = true
-		v.damage = math.huge
-		v.velocity = 500
-	end
-end
 
 -- [Find Character] --
 
@@ -89,7 +79,7 @@ Chams.Name = 'Chams'
 
 --> Tracers <--
 		
-getgenv().Tracers = true
+getgenv().Tracers = false
 		
 local Line = Drawing.new('Line')
 
@@ -153,7 +143,7 @@ end
 
 -- [Aimbot] --
 
-getgenv().Aimbot = true
+getgenv().Aimbot = false
 
 task.spawn(function()
 	if getgenv().Aimbot then
