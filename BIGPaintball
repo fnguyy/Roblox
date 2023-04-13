@@ -79,6 +79,8 @@ Chams.Name = 'Chams'
 
 --> Tracers <--
 		
+getgenv().Tracers = false
+		
 local Line = Drawing.new('Line')
 
 spawn(function()
@@ -140,6 +142,8 @@ if Character and Character:FindFirstChild('Humanoid') then
 end
 
 -- [Aimbot] --
+
+getgenv().Aimbot = false
 
 spawn(function()
 	if getgenv().Aimbot then
